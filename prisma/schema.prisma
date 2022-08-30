@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model historial {
+  cedula      String?   @db.VarChar
+  Nombre      String?   @db.VarChar
+  Dependencia String?   @db.VarChar
+  Cargo       String?   @db.VarChar
+  id          Int       @id @default(autoincrement())
+  fecha       DateTime? @db.Date
+  entregado   Boolean   @default(false)
+  descripcion String?    @db.Text
+}
