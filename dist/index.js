@@ -15,9 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const historial_service_1 = require("./src/services/historial.service");
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
 app.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { cedula, fecha } = req.query;
     console.log(req.query);
@@ -27,6 +31,10 @@ app.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
     res.json(result);
 }));
+app.put('/entregados', (req, res) => {
+    console.log('exito');
+    res.send('carnet entregado');
+});
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
