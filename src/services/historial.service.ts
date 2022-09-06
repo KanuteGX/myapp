@@ -1,22 +1,25 @@
-import { historial } from "@prisma/client";
-import { prismaClient } from "../config/prismaClient";
+import { historial } from '@prisma/client';
+import { prismaClient } from '../config/prismaClient';
 
-type getHistorialParams = { fecha?: string, cedula?: string }
+type getHistorialParams = { fecha?: string; cedula?: string };
 
-async function getHistorial({ fecha, cedula }: getHistorialParams): Promise<historial[]> {
-    
-    const { historial } = prismaClient
-    let parsedDate: undefined | Date
-    if(fecha) {
-        parsedDate = new Date(fecha)
-    }
-    const result = await historial.findMany({
-        where: {
-            fecha: parsedDate,
-            cedula
-        }
-    })
-    return result
+async function getHistorial({ fecha, cedula }: getHistorialParams): Promise<any> {
+	const { historial } = prismaClient;
+	let parsedDate: undefined | Date;
+
+	if (fecha) parsedDate = new Date(fecha);
+	if (!cedula) cedula = undefined;
+
+	if (parsedDate === undefined && cedula === undefined) return [];
+	else {
+		const result = await historial.findMany({
+			where: {
+				fecha: parsedDate,
+				cedula
+			}
+		});
+		return result;
+	}
 }
 
-export { getHistorial }
+export { getHistorial };
