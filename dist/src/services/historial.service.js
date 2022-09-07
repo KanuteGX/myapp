@@ -35,11 +35,14 @@ function getHistorial({ fecha, cedula }) {
 exports.getHistorial = getHistorial;
 const putHistorial = ({ id, entregado }) => __awaiter(void 0, void 0, void 0, function* () {
     const { historial } = prismaClient_1.prismaClient;
-    let fecha_entregado = null;
-    if (entregado)
-        yield historial.update({
-            where: { id },
-            data: { entregado }
+    let currentDate = new Date();
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    if (entregado) {
+        const result = yield historial.update({
+            data: { entregado, fecha_entregado: currentDate },
+            where: { id }
         });
+        return result; // object
+    }
 });
 exports.putHistorial = putHistorial;

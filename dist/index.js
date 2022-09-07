@@ -39,12 +39,8 @@ app.put('/entregados/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const { entregado } = req.body;
     const result = yield (0, historial_service_1.putHistorial)({ id, entregado });
     res.json(result);
-    console.log(req.body);
+    console.log(req.body, result);
 }));
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
-let currentDate = new Date();
-currentDate = new Date(`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().length === 1 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1}-${currentDate.getDate().toString().length === 1 ? '0' + currentDate.getDate() : currentDate.getDate()} ${currentDate.getHours().toString().length === 1 ? '0' + currentDate.getHours() : currentDate.getHours()}:${currentDate.getMinutes().toString().length === 1 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()}:${currentDate.getSeconds().toString().length === 1 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()}`);
-console.log(currentDate);
-console.log('2: ', new Date());
