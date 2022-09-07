@@ -9,22 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHistorial = void 0;
+exports.putHistorial = exports.getHistorial = void 0;
 const prismaClient_1 = require("../config/prismaClient");
 function getHistorial({ fecha, cedula }) {
     return __awaiter(this, void 0, void 0, function* () {
         const { historial } = prismaClient_1.prismaClient;
         let parsedDate;
-        if (fecha) {
+        if (fecha)
             parsedDate = new Date(fecha);
+        if (!cedula)
+            cedula = undefined;
+        if (parsedDate === undefined && cedula === undefined)
+            return [];
+        else {
+            const result = yield historial.findMany({
+                where: {
+                    fecha: parsedDate,
+                    cedula
+                }
+            });
+            return result;
         }
-        const result = yield historial.findMany({
-            where: {
-                fecha: parsedDate,
-                cedula
-            }
-        });
-        return result;
     });
 }
 exports.getHistorial = getHistorial;
+const putHistorial = ({ id, entregado }) => __awaiter(void 0, void 0, void 0, function* () {
+    const { historial } = prismaClient_1.prismaClient;
+    let fecha_entregado = null;
+    if (entregado)
+        yield historial.update({
+            where: { id },
+            data: { entregado }
+        });
+});
+exports.putHistorial = putHistorial;

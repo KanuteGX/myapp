@@ -38,7 +38,7 @@ app.put('/entregados/:id', async (req: Request, res: Response) => {
 
 	const result = await putHistorial({ id, entregado });
 	res.json(result);
-	console.log(req.body);
+	console.log(req.body, result);
 });
 
 app.listen(port, () => {

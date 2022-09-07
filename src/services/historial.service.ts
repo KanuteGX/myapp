@@ -1,10 +1,11 @@
+import { historial } from '@prisma/client';
 import { prismaClient } from '../config/prismaClient';
 
 // Algoritmo de GET
 
 type getHistorialParams = { fecha?: string; cedula?: string };
 
-async function getHistorial({ fecha, cedula }: getHistorialParams): Promise<any> {
+async function getHistorial({ fecha, cedula }: getHistorialParams): Promise<historial[]> {
 	const { historial } = prismaClient;
 	let parsedDate: undefined | Date;
 
@@ -29,15 +30,20 @@ export { getHistorial };
 
 type putHistorialParams = { id: number; entregado: boolean };
 
-const putHistorial = async ({ id, entregado }: putHistorialParams): Promise<void> => {
+const putHistorial = async ({ id, entregado }: putHistorialParams): Promise<any> => {
 	const { historial } = prismaClient;
 
-	let fecha_entregado = null;
+	let currentDate: Date = new Date();
 
-	await historial.update({
-		where: { id },
-		data: { entregado, fecha_entregado }
-	});
+	currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+	if (entregado) {
+		const result = await historial.update({
+			data: { entregado, fecha_entregado: currentDate },
+			where: { id }
+		});
+		return result; // object
+	}
 };
 
 export { putHistorial };
