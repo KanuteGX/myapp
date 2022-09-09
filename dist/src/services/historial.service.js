@@ -46,3 +46,4 @@ const putHistorial = ({ id, entregado }) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.putHistorial = putHistorial;
+console.log(1);

@@ -16,5 +16,5 @@ model historial {
   fecha       DateTime? @db.Date
   entregado   Boolean   @default(false)
   descripcion String?    @db.Text
-  fecha_entregado DateTime?  @db.Date
+  fecha_entregado DateTime?  @db.Timestamp()
 }
