@@ -34,9 +34,9 @@ app.get('/historial', async (req: Request, res: Response) => {
 app.put('/entregados/:id', async (req: Request, res: Response) => {
 	const id: number = parseInt(req.params.id);
 
-	const { entregado, fecha_entregado } = req.body as { entregado: boolean, fecha_entregado ?: Date };
+	const { entregado } = req.body as { entregado: boolean };
 
-	const result = await putHistorial({ id, entregado, fecha_entregado });
+	const result = await putHistorial({ id, entregado });
 	res.json(result);
 	console.log(req.body, result);
 });
@@ -44,5 +44,3 @@ app.put('/entregados/:id', async (req: Request, res: Response) => {
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
-
-

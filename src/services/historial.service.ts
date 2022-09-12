@@ -28,14 +28,16 @@ export { getHistorial };
 
 // Algoritmo de PUT
 
-type putHistorialParams = { id: number; entregado: boolean, fecha_entregado ?: Date };
+type putHistorialParams = { id: number; entregado: boolean };
 
-const putHistorial = async ({ id, entregado, fecha_entregado }: putHistorialParams): Promise<any> => {
+const putHistorial = async ({ id, entregado }: putHistorialParams): Promise<any> => {
 	const { historial } = prismaClient;
+
+	const currentDate: Date = new Date();
 
 	if (entregado) {
 		const result = await historial.update({
-			data: { entregado, fecha_entregado },
+			data: { entregado, fecha_entregado: currentDate },
 			where: { id }
 		});
 		return result; // object
