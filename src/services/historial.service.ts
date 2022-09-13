@@ -3,21 +3,44 @@ import { prismaClient } from '../config/prismaClient';
 
 // Algoritmo de GET
 
-type getHistorialParams = { fecha?: string; cedula?: string };
+type getHistorialParams = { cedula?: string; Nombre?: string; fecha?: string };
 
-async function getHistorial({ fecha, cedula }: getHistorialParams): Promise<historial[]> {
+async function getHistorial({ cedula, Nombre, fecha }: getHistorialParams): Promise<historial[]> {
 	const { historial } = prismaClient;
-	let parsedDate: undefined | Date;
 
-	if (fecha) parsedDate = new Date(fecha);
 	if (!cedula) cedula = undefined;
 
-	if (parsedDate === undefined && cedula === undefined) return [];
+	if (!Nombre) Nombre = undefined;
+
+	let parsedDate: undefined | Date;
+	let parsedDateMax: undefined | Date;
+
+	if (fecha) {
+		parsedDate = new Date(fecha);
+
+		// composicion de la fecha para que se entienda la extraccion de string - 2022-01-01
+
+		if (parseInt(fecha.slice(5, 7)) === 12) parsedDateMax = new Date(`${parseInt(fecha.slice(0, 4)) + 1}-01-01`);
+		else parsedDateMax = new Date(`${fecha.slice(0, 4)}-${parseInt(fecha.slice(5, 7)) + 1}-01`);
+	}
+
+	if (cedula === undefined && Nombre === undefined && parsedDate === undefined) return [];
 	else {
 		const result = await historial.findMany({
 			where: {
-				fecha: parsedDate,
-				cedula
+				cedula,
+				Nombre: {
+					contains: Nombre,
+					mode: 'insensitive'
+				},
+				AND: [
+					{
+						fecha: { gte: parsedDate }
+					},
+					{
+						fecha: { lt: parsedDateMax }
+					}
+				]
 			}
 		});
 		return result;

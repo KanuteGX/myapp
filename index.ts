@@ -23,13 +23,17 @@ app.use(
 	})
 );
 
-app.get('/historial', async (req: Request, res: Response) => {
-	const { cedula, fecha } = req.query as { cedula?: string; fecha?: string };
+// Peticion GET (Leer datos)
 
-	const result = await getHistorial({ cedula, fecha });
+app.get('/historial', async (req: Request, res: Response) => {
+	const { cedula, Nombre, fecha } = req.query as { cedula?: string; Nombre?: string; fecha?: string };
+
+	const result = await getHistorial({ cedula, Nombre, fecha });
 	res.json(result);
 	console.log(req.query);
 });
+
+// Peticion PUT (Actualizar datos)
 
 app.put('/entregados/:id', async (req: Request, res: Response) => {
 	const id: number = parseInt(req.params.id);
