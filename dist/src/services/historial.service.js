@@ -9,41 +9,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.putHistorial = exports.getHistorial = void 0;
+exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
 const prismaClient_1 = require("../config/prismaClient");
-function getHistorial({ fecha, cedula }) {
+function getHistorialForm({ cedula, Nombre, fecha }) {
     return __awaiter(this, void 0, void 0, function* () {
         const { historial } = prismaClient_1.prismaClient;
-        let parsedDate;
-        if (fecha)
-            parsedDate = new Date(fecha);
         if (!cedula)
             cedula = undefined;
-        if (parsedDate === undefined && cedula === undefined)
+        if (!Nombre)
+            Nombre = undefined;
+        let parsedDate;
+        let parsedDateMax;
+        if (fecha) {
+            parsedDate = new Date(fecha);
+            // composicion de la fecha para que se entienda la extraccion de string - 2022-01-01
+            if (parseInt(fecha.slice(5, 7)) === 12)
+                parsedDateMax = new Date(`${parseInt(fecha.slice(0, 4)) + 1}-01-01`);
+            else
+                parsedDateMax = new Date(`${fecha.slice(0, 4)}-${parseInt(fecha.slice(5, 7)) + 1}-01`);
+        }
+        if (cedula === undefined && Nombre === undefined && parsedDate === undefined)
             return [];
         else {
             const result = yield historial.findMany({
                 where: {
-                    fecha: parsedDate,
-                    cedula
+                    cedula,
+                    Nombre: {
+                        contains: Nombre,
+                        mode: 'insensitive'
+                    },
+                    AND: [
+                        {
+                            fecha: { gte: parsedDate }
+                        },
+                        {
+                            fecha: { lt: parsedDateMax }
+                        }
+                    ]
                 }
             });
             return result;
         }
     });
 }
-exports.getHistorial = getHistorial;
-const putHistorial = ({ id, entregado }) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getHistorialForm = getHistorialForm;
+const putHistorialCheck = ({ id, data }) => __awaiter(void 0, void 0, void 0, function* () {
     const { historial } = prismaClient_1.prismaClient;
-    let currentDate = new Date();
-    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-    if (entregado) {
+    const currentDate = new Date();
+    if (data) {
         const result = yield historial.update({
-            data: { entregado, fecha_entregado: currentDate },
+            data: { entregado: data, fecha_entregado: currentDate },
             where: { id }
         });
         return result; // object
     }
 });
-exports.putHistorial = putHistorial;
-console.log(1);
+exports.putHistorialCheck = putHistorialCheck;
+const putHistorialDescrip = ({ id, data }) => __awaiter(void 0, void 0, void 0, function* () {
+    const { historial } = prismaClient_1.prismaClient;
+    data = data === null || data === void 0 ? void 0 : data.trim();
+    if (data) {
+        const result = yield historial.update({
+            data: { descripcion: data },
+            where: { id }
+        });
+        return result; // object
+    }
+});
+exports.putHistorialDescrip = putHistorialDescrip;

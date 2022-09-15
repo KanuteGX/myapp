@@ -28,19 +28,30 @@ app.use((0, cors_1.default)({
 app.use(express_1.default.urlencoded({
     extended: true
 }));
+// Peticion GET Form (Leer datos)
 app.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cedula, fecha } = req.query;
-    const result = yield (0, historial_service_1.getHistorial)({ cedula, fecha });
+    const { cedula, Nombre, fecha } = req.query;
+    const result = yield (0, historial_service_1.getHistorialForm)({ cedula, Nombre, fecha });
     res.json(result);
     console.log(req.query);
 }));
+// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
 app.put('/entregados/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
-    const { entregado } = req.body;
-    const result = yield (0, historial_service_1.putHistorial)({ id, entregado });
+    const { data } = req.body;
+    const result = yield (0, historial_service_1.putHistorialCheck)({ id, data });
     res.json(result);
     console.log(req.body, result);
 }));
+// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
+app.put('/descripciones/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const { data } = req.body;
+    const result = yield (0, historial_service_1.putHistorialDescrip)({ id, data });
+    res.json(result);
+    console.log(req.body, result);
+}));
+// Peticion PUT Description (Actualizar datos)
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });

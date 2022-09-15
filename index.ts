@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { getHistorial, putHistorial } from './src/services/historial.service';
+import { getHistorialForm, putHistorialCheck, putHistorialDescrip } from './src/services/historial.service';
 import cors from 'cors';
 
 dotenv.config();
@@ -23,27 +23,41 @@ app.use(
 	})
 );
 
-// Peticion GET (Leer datos)
+// Peticion GET Form (Leer datos)
 
 app.get('/historial', async (req: Request, res: Response) => {
 	const { cedula, Nombre, fecha } = req.query as { cedula?: string; Nombre?: string; fecha?: string };
 
-	const result = await getHistorial({ cedula, Nombre, fecha });
+	const result = await getHistorialForm({ cedula, Nombre, fecha });
 	res.json(result);
 	console.log(req.query);
 });
 
-// Peticion PUT (Actualizar datos)
+// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
 
 app.put('/entregados/:id', async (req: Request, res: Response) => {
 	const id: number = parseInt(req.params.id);
 
-	const { entregado } = req.body as { entregado: boolean };
+	const { data } = req.body as { data: boolean };
 
-	const result = await putHistorial({ id, entregado });
+	const result = await putHistorialCheck({ id, data });
 	res.json(result);
 	console.log(req.body, result);
 });
+
+// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
+
+app.put('/descripciones/:id', async (req: Request, res: Response) => {
+	const id: number = parseInt(req.params.id);
+
+	const { data } = req.body as { data?: string };
+
+	const result = await putHistorialDescrip({ id, data });
+	res.json(result);
+	console.log(req.body, result);
+});
+
+// Peticion PUT Description (Actualizar datos)
 
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at https://localhost:${port}`);

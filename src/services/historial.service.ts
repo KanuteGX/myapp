@@ -1,11 +1,11 @@
 import { historial } from '@prisma/client';
 import { prismaClient } from '../config/prismaClient';
 
-// Algoritmo de GET
+// Algoritmo de GET - Form
 
-type getHistorialParams = { cedula?: string; Nombre?: string; fecha?: string };
+type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string };
 
-async function getHistorial({ cedula, Nombre, fecha }: getHistorialParams): Promise<historial[]> {
+async function getHistorialForm({ cedula, Nombre, fecha }: getHistorialFormParams): Promise<historial[]> {
 	const { historial } = prismaClient;
 
 	if (!cedula) cedula = undefined;
@@ -47,24 +47,44 @@ async function getHistorial({ cedula, Nombre, fecha }: getHistorialParams): Prom
 	}
 }
 
-export { getHistorial };
+export { getHistorialForm };
 
-// Algoritmo de PUT
+// Algoritmo de PUT - Check
 
-type putHistorialParams = { id: number; entregado: boolean };
+type putHistorialCheckParams = { id: number; data: boolean };
 
-const putHistorial = async ({ id, entregado }: putHistorialParams): Promise<any> => {
+const putHistorialCheck = async ({ id, data }: putHistorialCheckParams): Promise<any> => {
 	const { historial } = prismaClient;
 
 	const currentDate: Date = new Date();
 
-	if (entregado) {
+	if (data) {
 		const result = await historial.update({
-			data: { entregado, fecha_entregado: currentDate },
+			data: { entregado: data, fecha_entregado: currentDate },
 			where: { id }
 		});
 		return result; // object
 	}
 };
 
-export { putHistorial };
+export { putHistorialCheck };
+
+// Algoritmo de PUT - Description
+
+type putHistorialDescripParams = { id: number; data?: string };
+
+const putHistorialDescrip = async ({ id, data }: putHistorialDescripParams): Promise<any> => {
+	const { historial } = prismaClient;
+
+	data = data?.trim();
+
+	if (data) {
+		const result = await historial.update({
+			data: { descripcion: data },
+			where: { id }
+		});
+		return result; // object
+	}
+};
+
+export { putHistorialDescrip };
