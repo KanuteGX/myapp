@@ -3,9 +3,9 @@ import { prismaClient } from '../config/prismaClient';
 
 // Algoritmo de GET - Form
 
-type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string };
+type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string; entregado ?: string };
 
-async function getHistorialForm({ cedula, Nombre, fecha }: getHistorialFormParams): Promise<historial[]> {
+async function getHistorialForm({ cedula, Nombre, fecha, entregado }: getHistorialFormParams): Promise<historial[]> {
 	const { historial } = prismaClient;
 
 	if (!cedula) cedula = undefined;
@@ -24,7 +24,13 @@ async function getHistorialForm({ cedula, Nombre, fecha }: getHistorialFormParam
 		else parsedDateMax = new Date(`${fecha.slice(0, 4)}-${parseInt(fecha.slice(5, 7)) + 1}-01`);
 	}
 
-	if (cedula === undefined && Nombre === undefined && parsedDate === undefined) return [];
+	let parsedBoolean :boolean | undefined;
+
+if (entregado === 'false') parsedBoolean = undefined
+else parsedBoolean = Boolean(entregado)
+
+
+	if (cedula === undefined && Nombre === undefined && parsedDate === undefined && parsedBoolean === undefined) return [];
 	else {
 		const result = await historial.findMany({
 			where: {
@@ -40,7 +46,8 @@ async function getHistorialForm({ cedula, Nombre, fecha }: getHistorialFormParam
 					{
 						fecha: { lt: parsedDateMax }
 					}
-				]
+				],
+				entregado : parsedBoolean
 			}
 		});
 		return result;
