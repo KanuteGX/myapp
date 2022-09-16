@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
 const prismaClient_1 = require("../config/prismaClient");
-function getHistorialForm({ cedula, Nombre, fecha }) {
+function getHistorialForm({ cedula, Nombre, fecha, entregado }) {
     return __awaiter(this, void 0, void 0, function* () {
         const { historial } = prismaClient_1.prismaClient;
         if (!cedula)
@@ -28,7 +28,12 @@ function getHistorialForm({ cedula, Nombre, fecha }) {
             else
                 parsedDateMax = new Date(`${fecha.slice(0, 4)}-${parseInt(fecha.slice(5, 7)) + 1}-01`);
         }
-        if (cedula === undefined && Nombre === undefined && parsedDate === undefined)
+        let parsedBoolean;
+        if (entregado === 'false')
+            parsedBoolean = undefined;
+        else
+            parsedBoolean = Boolean(entregado);
+        if (cedula === undefined && Nombre === undefined && parsedDate === undefined && parsedBoolean === undefined)
             return [];
         else {
             const result = yield historial.findMany({
@@ -45,7 +50,8 @@ function getHistorialForm({ cedula, Nombre, fecha }) {
                         {
                             fecha: { lt: parsedDateMax }
                         }
-                    ]
+                    ],
+                    entregado: parsedBoolean
                 }
             });
             return result;

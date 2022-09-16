@@ -30,8 +30,8 @@ app.use(express_1.default.urlencoded({
 }));
 // Peticion GET Form (Leer datos)
 app.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cedula, Nombre, fecha } = req.query;
-    const result = yield (0, historial_service_1.getHistorialForm)({ cedula, Nombre, fecha });
+    const { cedula, Nombre, fecha, entregado } = req.query;
+    const result = yield (0, historial_service_1.getHistorialForm)({ cedula, Nombre, fecha, entregado });
     res.json(result);
     console.log(req.query);
 }));
