@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { getHistorialForm, putHistorialCheck, putHistorialDescrip } from './src/services/historial.service';
+import { getHistorialForm, putHistorialCheck, putHistorialDescrip, deleteUser } from './src/services/historial.service';
 import cors from 'cors';
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.use(
 // Peticion GET Form (Leer datos)
 
 app.get('/historial', async (req: Request, res: Response) => {
-	const { cedula, Nombre, fecha, entregado } = req.query as { cedula?: string; Nombre?: string; fecha?: string; entregado?: string  };
+	const { cedula, Nombre, fecha, entregado } = req.query as { cedula?: string; Nombre?: string; fecha?: string; entregado?: string };
 
 	const result = await getHistorialForm({ cedula, Nombre, fecha, entregado });
 	res.json(result);
@@ -45,7 +45,7 @@ app.put('/entregados/:id', async (req: Request, res: Response) => {
 	console.log(req.body, result);
 });
 
-// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
+// Peticion PUT Description (Actualizar datos)
 
 app.put('/descripciones/:id', async (req: Request, res: Response) => {
 	const id: number = parseInt(req.params.id);
@@ -57,7 +57,15 @@ app.put('/descripciones/:id', async (req: Request, res: Response) => {
 	console.log(req.body, result);
 });
 
-// Peticion PUT Description (Actualizar datos)
+// Peticion - DELETE User
+
+app.delete('/eliminados/:id', async (req: Request, res: Response) => {
+	const id: number = parseInt(req.params.id);
+
+	const result = await deleteUser(id);
+	res.json(result);
+	console.log(result);
+});
 
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at https://localhost:${port}`);

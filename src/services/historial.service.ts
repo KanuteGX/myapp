@@ -3,7 +3,7 @@ import { prismaClient } from '../config/prismaClient';
 
 // Algoritmo de GET - Form
 
-type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string; entregado ?: string };
+type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string; entregado?: string };
 
 async function getHistorialForm({ cedula, Nombre, fecha, entregado }: getHistorialFormParams): Promise<historial[]> {
 	const { historial } = prismaClient;
@@ -24,11 +24,10 @@ async function getHistorialForm({ cedula, Nombre, fecha, entregado }: getHistori
 		else parsedDateMax = new Date(`${fecha.slice(0, 4)}-${parseInt(fecha.slice(5, 7)) + 1}-01`);
 	}
 
-	let parsedBoolean :boolean | undefined;
+	let parsedBoolean: boolean | undefined;
 
-if (entregado === 'false') parsedBoolean = undefined
-else parsedBoolean = Boolean(entregado)
-
+	if (entregado === 'false') parsedBoolean = undefined;
+	else parsedBoolean = Boolean(entregado);
 
 	if (cedula === undefined && Nombre === undefined && parsedDate === undefined && parsedBoolean === undefined) return [];
 	else {
@@ -47,7 +46,7 @@ else parsedBoolean = Boolean(entregado)
 						fecha: { lt: parsedDateMax }
 					}
 				],
-				entregado : parsedBoolean
+				entregado: parsedBoolean
 			}
 		});
 		return result;
@@ -95,3 +94,14 @@ const putHistorialDescrip = async ({ id, data }: putHistorialDescripParams): Pro
 };
 
 export { putHistorialDescrip };
+
+// Algoritmo DELETE - User
+
+const deleteUser = async (id: number): Promise<any> => {
+	const { historial } = prismaClient;
+
+	const result = await historial.delete({ where: { id } });
+	return result;
+};
+
+export { deleteUser };
