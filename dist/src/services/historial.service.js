@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
+exports.deleteUser = exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
 const prismaClient_1 = require("../config/prismaClient");
 function getHistorialForm({ cedula, Nombre, fecha, entregado }) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -83,3 +83,10 @@ const putHistorialDescrip = ({ id, data }) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.putHistorialDescrip = putHistorialDescrip;
+// Algoritmo DELETE - User
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const { historial } = prismaClient_1.prismaClient;
+    const result = yield historial.delete({ where: { id } });
+    return result;
+});
+exports.deleteUser = deleteUser;

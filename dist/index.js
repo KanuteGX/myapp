@@ -43,7 +43,7 @@ app.put('/entregados/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
     res.json(result);
     console.log(req.body, result);
 }));
-// Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
+// Peticion PUT Description (Actualizar datos)
 app.put('/descripciones/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
     const { data } = req.body;
@@ -51,7 +51,13 @@ app.put('/descripciones/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
     res.json(result);
     console.log(req.body, result);
 }));
-// Peticion PUT Description (Actualizar datos)
+// Peticion - DELETE User
+app.delete('/eliminados/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const result = yield (0, historial_service_1.deleteUser)(id);
+    res.json(result);
+    console.log(result);
+}));
 app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
