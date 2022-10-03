@@ -33,7 +33,7 @@ app.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { cedula, Nombre, fecha, entregado, userViews } = req.query;
     const result = yield (0, historial_service_1.getHistorialForm)({ cedula, Nombre, fecha, entregado, userViews });
     res.json(result);
-    console.log(req.query);
+    console.log(req.query, result[1]);
 }));
 // Peticion PUT Check - fecha entregado and entregado (Actualizar datos)
 app.put('/entregados/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

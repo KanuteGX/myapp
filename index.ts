@@ -36,7 +36,7 @@ app.get('/historial', async (req: Request, res: Response) => {
 
 	const result = await getHistorialForm({ cedula, Nombre, fecha, entregado, userViews });
 	res.json(result);
-	console.log(req.query);
+	console.log(req.query, result[1]);
 });
 
 // Peticion PUT Check - fecha entregado and entregado (Actualizar datos)

@@ -5,7 +5,7 @@ import { prismaClient } from '../config/prismaClient';
 
 type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string; entregado?: string; userViews?: string };
 
-async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }: getHistorialFormParams): Promise<historial[]> {
+async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }: getHistorialFormParams): Promise<any> {
 	const { historial } = prismaClient;
 
 	if (!cedula) cedula = undefined;
@@ -56,10 +56,32 @@ async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }:
 			skip: userViewsData,
 			take: 5
 		});
-		return result;
+
+		if (userViewsData === 0) {
+			const dataLength = await historial.findMany({
+				where: {
+					cedula,
+					Nombre: {
+						contains: Nombre,
+						mode: 'insensitive'
+					},
+					AND: [
+						{
+							fecha: { gte: parsedDate }
+						},
+						{
+							fecha: { lt: parsedDateMax }
+						}
+					],
+					entregado: parsedBoolean
+				}
+			});
+			return [result, dataLength.length];
+		}
+
+		return [result];
 	}
 }
-
 export { getHistorialForm };
 
 // Algoritmo de PUT - Check
