@@ -26,9 +26,15 @@ app.use(
 // Peticion GET Form (Leer datos)
 
 app.get('/historial', async (req: Request, res: Response) => {
-	const { cedula, Nombre, fecha, entregado } = req.query as { cedula?: string; Nombre?: string; fecha?: string; entregado?: string };
+	const { cedula, Nombre, fecha, entregado, userViews } = req.query as {
+		cedula?: string;
+		Nombre?: string;
+		fecha?: string;
+		entregado?: string;
+		userViews?: string;
+	};
 
-	const result = await getHistorialForm({ cedula, Nombre, fecha, entregado });
+	const result = await getHistorialForm({ cedula, Nombre, fecha, entregado, userViews });
 	res.json(result);
 	console.log(req.query);
 });
