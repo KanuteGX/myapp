@@ -17,4 +17,5 @@ model historial {
   entregado   Boolean   @default(false)
   descripcion String?    @db.Text
   fecha_entregado DateTime?  @db.Timestamp()
+  estado Int @default(0)
 }

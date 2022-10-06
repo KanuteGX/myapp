@@ -134,3 +134,25 @@ const deleteUser = async (id: number): Promise<any> => {
 };
 
 export { deleteUser };
+
+// Algoritmo de PUT - Status
+
+type putHistorialStatusParams = { id: number; data: string };
+
+const putHistorialStatus = async ({ id, data }: putHistorialStatusParams): Promise<any> => {
+	const { historial } = prismaClient;
+
+	enum status {
+		Activo,
+		Inactivo,
+		Extraviado
+	}
+
+	const result = await historial.update({
+		data: { estado: status[data] },
+		where: { id }
+	});
+	return result; // object
+};
+
+export { putHistorialStatus };

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
+exports.putHistorialStatus = exports.deleteUser = exports.putHistorialDescrip = exports.putHistorialCheck = exports.getHistorialForm = void 0;
 const prismaClient_1 = require("../config/prismaClient");
 function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -117,3 +117,18 @@ const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 exports.deleteUser = deleteUser;
+const putHistorialStatus = ({ id, data }) => __awaiter(void 0, void 0, void 0, function* () {
+    const { historial } = prismaClient_1.prismaClient;
+    let status;
+    (function (status) {
+        status[status["Activo"] = 0] = "Activo";
+        status[status["Inactivo"] = 1] = "Inactivo";
+        status[status["Extraviado"] = 2] = "Extraviado";
+    })(status || (status = {}));
+    const result = yield historial.update({
+        data: { estado: status[data] },
+        where: { id }
+    });
+    return result; // object
+});
+exports.putHistorialStatus = putHistorialStatus;

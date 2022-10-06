@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { getHistorialForm, putHistorialCheck, putHistorialDescrip, deleteUser } from './src/services/historial.service';
+import { getHistorialForm, putHistorialCheck, putHistorialStatus, putHistorialDescrip, deleteUser } from './src/services/historial.service';
 import cors from 'cors';
 
 dotenv.config();
@@ -71,6 +71,18 @@ app.delete('/eliminados/:id', async (req: Request, res: Response) => {
 	const result = await deleteUser(id);
 	res.json(result);
 	console.log(result);
+});
+
+// Peticion PUT Status (Actualizar datos)
+
+app.put('/estado/:id', async (req: Request, res: Response) => {
+	const id: number = parseInt(req.params.id);
+
+	const { data } = req.body as { data: string };
+
+	const result = await putHistorialStatus({ id, data });
+	res.json(result);
+	console.log(req.body, result);
 });
 
 app.listen(port, () => {

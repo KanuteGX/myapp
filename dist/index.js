@@ -58,6 +58,14 @@ app.delete('/eliminados/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
     res.json(result);
     console.log(result);
 }));
+// Peticion PUT Status (Actualizar datos)
+app.put('/estado/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const { data } = req.body;
+    const result = yield (0, historial_service_1.putHistorialStatus)({ id, data });
+    res.json(result);
+    console.log(req.body, result);
+}));
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
