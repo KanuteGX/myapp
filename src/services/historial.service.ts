@@ -29,7 +29,7 @@ async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }:
 	if (entregado === 'false') parsedBoolean = undefined;
 	else parsedBoolean = Boolean(entregado);
 
-	const userViewsData: number = Number(userViews);
+	const userViewsData: number = Number(userViews) ?? 0;
 
 	if (cedula === undefined && Nombre === undefined && parsedDate === undefined && parsedBoolean === undefined) return [];
 	else {
@@ -137,7 +137,7 @@ export { deleteUser };
 
 // Algoritmo de PUT - Status
 
-type putHistorialStatusParams = { id: number; data: string };
+type putHistorialStatusParams = { id: number; data: unknown };
 
 const putHistorialStatus = async ({ id, data }: putHistorialStatusParams): Promise<any> => {
 	const { historial } = prismaClient;
@@ -149,7 +149,7 @@ const putHistorialStatus = async ({ id, data }: putHistorialStatusParams): Promi
 	}
 
 	const result = await historial.update({
-		data: { estado: status[data] },
+		data: { estado: parseInt(status[data as status]) },
 		where: { id }
 	});
 	return result; // object

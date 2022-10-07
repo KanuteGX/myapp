@@ -78,7 +78,7 @@ app.delete('/eliminados/:id', async (req: Request, res: Response) => {
 app.put('/estado/:id', async (req: Request, res: Response) => {
 	const id: number = parseInt(req.params.id);
 
-	const { data } = req.body as { data: string };
+	const { data } = req.body as { data: unknown };
 
 	const result = await putHistorialStatus({ id, data });
 	res.json(result);
