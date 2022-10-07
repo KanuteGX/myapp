@@ -1,11 +1,14 @@
 import { historial } from '@prisma/client';
+import { type } from 'os';
 import { prismaClient } from '../config/prismaClient';
 
 // Algoritmo de GET - Form
 
 type getHistorialFormParams = { cedula?: string; Nombre?: string; fecha?: string; entregado?: string; userViews?: string };
 
-async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }: getHistorialFormParams): Promise<any> {
+type returnForm = Array<number | historial[]>;
+
+async function getHistorialForm({ cedula, Nombre, fecha, entregado, userViews }: getHistorialFormParams): Promise<returnForm> {
 	const { historial } = prismaClient;
 
 	if (!cedula) cedula = undefined;
